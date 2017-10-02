@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {TodosService} from '../todos.service';
+import { TodosService } from '../todos.service';
 
 @Component({
   selector: 'app-todos',
@@ -12,69 +12,57 @@ export class TodosComponent implements OnInit {
   action: any;
   name: any;
   isDone: boolean;
-  
 
-  constructor(private todoService: TodosService) { 
-    
-  }
+  constructor(private todoService: TodosService) {}
 
   ngOnInit() {
-    this .todoService.getTodos()
-    .subscribe(todos => {
+    this.todoService.getTodos().subscribe(todos => {
       console.log(todos);
       this.todos = todos;
     });
   }
 
   //create Todo
-  addTodos(event){
+  addTodos(event) {
     event.preventDefault();
     var newTodo = {
       name: this.name,
       action: this.action,
       isDone: false
-    }
+    };
 
-    this.todoService.addTodos(newTodo)
-    .subscribe(todo =>{
-    this.todos.push(todo);
-    this.name = '';
-    this.action = '';
+    this.todoService.addTodos(newTodo).subscribe(todo => {
+      this.todos.push(todo);
+      this.name = '';
+      this.action = '';
     });
+  }
 
-    
-    }
+  //Remove Todo
+  deleteTodo(id) {
+    var todos = this.todos;
 
-    //Remove Todo
-  deleteTodo(id){
-		var todos = this.todos;
-
-		this.todoService.deleteTodo(id).subscribe(data =>{
-			if(data.n == 1){
-				for(var i = 0;i< todos.length; i++){
-					if(todos[i]._id ==id){
-						todos.splice(i, 1);
-					}
-				}
-			}
-		});
+    this.todoService.deleteTodo(id).subscribe(data => {
+      console.log(id);
+      const index = this.todos.findIndex(todo => todo._id == id);
+      todos.splice(index, 1)
+    });
   }
 
   //Update Todo
-  updateStatus(todo){
+  updateStatus(todo) {
     var _todo = {
-      _id:todo._id,
+      _id: todo._id,
       action: todo.action,
       isDone: !todo.isDone
     };
-    this.todoService.updateStatus(_todo)
-    .subscribe(data =>{
-      todo.isDone = !todo.isDone;
+    this.todoService.updateStatus(_todo).subscribe(data => {
+      const index = this.todos.findIndex(todo => todo._id == _todo._id)
+      this.todos[index] = _todo;
     });
   }
-  choice(todo){
-    console.log(todo)
+  choice(todo) {
+    console.log(todo);
     return todo.isDone;
   }
-
 }
