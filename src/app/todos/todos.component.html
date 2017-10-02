@@ -5,8 +5,8 @@
   </form>
   <div class="row" *ngFor="let todo of todos">
     <div class="card card-block">
-      <p class="card-text" (click)="updateStatus(todo)" [ngStyle]="{ 'line-through': todo.isDone}" >Action: {{todo.action}}</p>
-        todo.isDone
+      <p class="card-text" (click)="updateStatus(todo)" [ngStyle]="{ 'text-decoration': todo.isDone ? 'line-through' : ''}" >Action: {{todo.action}}</p>
+        {{todo.isDone}}
       <button (click) ="deleteTodo(todo._id)" class="btn btn-danger">Delete</button>
     </div>
   </div>
